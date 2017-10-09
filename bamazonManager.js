@@ -41,7 +41,7 @@ var managerOption = function(){
 					addInventory();
 					break;
 				case 'Add New Product':
-					addProduct();
+					newProduct();
 					break;
 			}
 		});
@@ -138,4 +138,36 @@ var addInventory = function(){
 	});
 
 };
+
+
+var newProduct = function(){
+	inquirer.prompt([{
+		name: 'product_name',
+		type: 'input',
+		message: 'What is the product you would like to add?'
+	}, {
+		name: 'department_name',
+		type: 'input',
+		message: 'What is the department for this product?'
+	}, {
+		name: 'price',
+		type: 'input',
+		message: "What is the products price?"
+	}, {
+		name: 'stock_qty',
+		type: "input",
+		message: "How many units would you like to stock?"
+	}]).then(function(answer){
+		connection.query("INSERT INTO products SET ?", {
+			product_name: answer.product_name,
+			department_name: answer.department_name,
+			price: answer.price,
+			stock_qty: answer.stock_qty
+		}, function(err, resuts){
+			if (err) throw err;
+			console.log('\nYour product has been successfully added to products table!\n');
+			managerOption();
+		});
+	});
+}
 
