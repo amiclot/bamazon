@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if (err) throw err;
-    connection.query("SELECT id, product_name, department_name, price FROM products", function(err, results){
+    connection.query("SELECT * FROM products", function(err, results){
     	if (err) throw err;
     	console.log("Here is our current selection of wares: \n")
 
@@ -56,13 +56,13 @@ function start(){
 			connection.query('SELECT * from products WHERE id =' + answers.id, function(err, results){
 				if (err) throw err;
 				//console.log(results);
-				if(results[0].stock_qty > answers.stock_qty){
+				if(results[0].stock_qty >= answers.stock_qty){
 					var updateQty = results[0].stock_qty - answers.stock_qty;
 					connection.query('UPDATE products SET stock_qty=' + updateQty + ' WHERE id = ' + answers.id)
 					//console.log(results[0].price);
 					console.log('\n--------------------------------------------------------------------------\n');
 					console.log('Thank you for your transaction.\n')
-					console.log('You purchased ' + answers.stock_qty + ' ' + results[0].product_name + " for " +  results[0].price + " USD!");
+					console.log('You purchased ' + answers.stock_qty + ' ' + results[0].product_name + " for " +  results[0].price * answers.stock_qty + " USD!");
 					console.log('\n--------------------------------------------------------------------------\n');
 				}else{
 					console.log('\n--------------------------------------------------------------------------\n');
